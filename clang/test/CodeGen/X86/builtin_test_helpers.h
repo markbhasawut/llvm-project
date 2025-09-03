@@ -68,6 +68,11 @@ constexpr bool match_v4si(__m128i _v, int a, int b, int c, int d) {
   return v[0] == a && v[1] == b && v[2] == c && v[3] == d;
 }
 
+constexpr bool match_v4su(__m128i _v, unsigned int a, unsigned int b, unsigned int c, unsigned int d) {
+  __v4su v = (__v4su)_v;
+  return v[0] == a && v[1] == b && v[2] == c && v[3] == d;
+}
+
 constexpr bool match_v8hi(__m128i _v, short a, short b, short c, short d, short e, short f, short g, short h) {
   __v8hi v = (__v8hi)_v;
   return v[0] == a && v[1] == b && v[2] == c && v[3] == d && v[4] == e && v[5] == f && v[6] == g && v[7] == h;
@@ -120,6 +125,11 @@ constexpr bool match_v4di(__m256i _v, long long a, long long b, long long c, lon
 
 constexpr bool match_v8si(__m256i _v, int a, int b, int c, int d, int e, int f, int g, int h) {
   __v8si v = (__v8si)_v;
+  return v[0] == a && v[1] == b && v[2] == c && v[3] == d && v[4] == e && v[5] == f && v[6] == g && v[7] == h;
+}
+
+constexpr bool match_v8su(__m256i _v, unsigned int a, unsigned int b, unsigned int c, unsigned int d, unsigned int e, unsigned int f, unsigned int g, unsigned int h) {
+  __v8su v = (__v8su)_v;
   return v[0] == a && v[1] == b && v[2] == c && v[3] == d && v[4] == e && v[5] == f && v[6] == g && v[7] == h;
 }
 
@@ -196,6 +206,11 @@ constexpr bool match_v8di(__m512i _v, long long a, long long b, long long c, lon
 
 constexpr bool match_v16si(__m512i _v, int a, int b, int c, int d, int e, int f, int g, int h, int i, int j, int k, int l, int m, int n, int o, int p) {
   __v16si v = (__v16si)_v;
+  return v[0] == a && v[1] == b && v[2] == c && v[3] == d && v[4] == e && v[5] == f && v[6] == g && v[7] == h && v[8] == i && v[9] == j && v[10] == k && v[11] == l && v[12] == m && v[13] == n && v[14] == o && v[15] == p;
+}
+
+constexpr bool match_v16su(__m512i _v, unsigned int a, unsigned int b, unsigned int c, unsigned int d, unsigned int e, unsigned int f, unsigned int g, unsigned int h, unsigned int i, unsigned int j, unsigned int k, unsigned int l, unsigned int m, unsigned int n, unsigned int o, unsigned int p) {
+  __v16su v = (__v16su)_v;
   return v[0] == a && v[1] == b && v[2] == c && v[3] == d && v[4] == e && v[5] == f && v[6] == g && v[7] == h && v[8] == i && v[9] == j && v[10] == k && v[11] == l && v[12] == m && v[13] == n && v[14] == o && v[15] == p;
 }
 

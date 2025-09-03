@@ -2313,7 +2313,7 @@ static __inline__ __m128i __DEFAULT_FN_ATTRS _mm_madd_epi16(__m128i __a,
 ///    A 128-bit signed [8 x i16] vector.
 /// \returns A 128-bit signed [8 x i16] vector containing the greater value of
 ///    each comparison.
-static __inline__ __m128i __DEFAULT_FN_ATTRS _mm_max_epi16(__m128i __a,
+static __inline__ __m128i __DEFAULT_FN_ATTRS_CONSTEXPR _mm_max_epi16(__m128i __a,
                                                            __m128i __b) {
   return (__m128i)__builtin_elementwise_max((__v8hi)__a, (__v8hi)__b);
 }
@@ -2332,7 +2332,7 @@ static __inline__ __m128i __DEFAULT_FN_ATTRS _mm_max_epi16(__m128i __a,
 ///    A 128-bit unsigned [16 x i8] vector.
 /// \returns A 128-bit unsigned [16 x i8] vector containing the greater value of
 ///    each comparison.
-static __inline__ __m128i __DEFAULT_FN_ATTRS _mm_max_epu8(__m128i __a,
+static __inline__ __m128i __DEFAULT_FN_ATTRS_CONSTEXPR _mm_max_epu8(__m128i __a,
                                                           __m128i __b) {
   return (__m128i)__builtin_elementwise_max((__v16qu)__a, (__v16qu)__b);
 }
@@ -2351,7 +2351,7 @@ static __inline__ __m128i __DEFAULT_FN_ATTRS _mm_max_epu8(__m128i __a,
 ///    A 128-bit signed [8 x i16] vector.
 /// \returns A 128-bit signed [8 x i16] vector containing the smaller value of
 ///    each comparison.
-static __inline__ __m128i __DEFAULT_FN_ATTRS _mm_min_epi16(__m128i __a,
+static __inline__ __m128i __DEFAULT_FN_ATTRS_CONSTEXPR _mm_min_epi16(__m128i __a,
                                                            __m128i __b) {
   return (__m128i)__builtin_elementwise_min((__v8hi)__a, (__v8hi)__b);
 }
