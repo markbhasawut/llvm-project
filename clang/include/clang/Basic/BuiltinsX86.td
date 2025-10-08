@@ -110,7 +110,14 @@ let Attributes = [Const, NoThrow, RequiredVectorWidth<128>] in {
   }
 
   let Features = "sse3" in {
-    foreach Op = ["addsub", "hadd", "hsub"] in {
+    foreach Op = ["hadd", "hsub"] in {
+      def Op#ps : X86Builtin<"_Vector<4, float>(_Vector<4, float>, _Vector<4, float>)">;
+      def Op#pd : X86Builtin<"_Vector<2, double>(_Vector<2, double>, _Vector<2, double>)">;
+    }
+  }
+
+  let Features = "sse3", Attributes = [NoThrow, Const, Constexpr, RequiredVectorWidth<128>] in {
+    foreach Op = ["addsub"] in {
       def Op#ps : X86Builtin<"_Vector<4, float>(_Vector<4, float>, _Vector<4, float>)">;
       def Op#pd : X86Builtin<"_Vector<2, double>(_Vector<2, double>, _Vector<2, double>)">;
     }
@@ -137,7 +144,14 @@ let Attributes = [Const, NoThrow, RequiredVectorWidth<128>] in {
 
 // AVX
 let Attributes = [Const, NoThrow, RequiredVectorWidth<256>], Features = "avx" in {
-  foreach Op = ["addsub", "hadd", "hsub", "max", "min"] in {
+  foreach Op = ["hadd", "hsub", "max", "min"] in {
+    def Op#pd256 : X86Builtin<"_Vector<4, double>(_Vector<4, double>, _Vector<4, double>)">;
+    def Op#ps256 : X86Builtin<"_Vector<8, float>(_Vector<8, float>, _Vector<8, float>)">;
+  }
+}
+
+let Attributes = [NoThrow, Const, Constexpr, RequiredVectorWidth<256>], Features = "avx" in {
+  foreach Op = ["addsub"] in {
     def Op#pd256 : X86Builtin<"_Vector<4, double>(_Vector<4, double>, _Vector<4, double>)">;
     def Op#ps256 : X86Builtin<"_Vector<8, float>(_Vector<8, float>, _Vector<8, float>)">;
   }
