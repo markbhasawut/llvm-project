@@ -2635,6 +2635,43 @@ static bool interp__builtin_ia32_pmul(InterpState &S, CodePtr OpPC,
   return true;
 }
 
+static bool interp__builtin_ia32_addsub_fp(
+    InterpState &S, CodePtr OpPC, const CallExpr *Call,
+    llvm::function_ref<APFloat(const APFloat &, const APFloat &,
+                               llvm::RoundingMode)>
+        Fn) {
+  assert(Call->getNumArgs() == 2);
+
+  FPOptions FPO = Call->getFPFeaturesInEffect(S.Ctx.getLangOpts());
+  llvm::RoundingMode RM = getRoundingMode(FPO);
+  const QualType Arg1Type = Call->getArg(0)->getType();
+  const QualType Arg2Type = Call->getArg(1)->getType();
+
+  assert(Arg1Type->isVectorType() && Arg2Type->isVectorType());
+
+  const VectorType *VecT = Arg1Type->castAs<VectorType>();
+  const QualType ElemT = VecT->getElementType();
+  unsigned NumElems = VecT->getNumElements();
+
+  assert(ElemT == Arg2Type->castAs<VectorType>()->getElementType());
+  assert(NumElems == Arg2Type->castAs<VectorType>()->getNumElements());
+  assert(ElemT->isRealFloatingType());
+  (void)ElemT;
+
+  const Pointer &VY = S.Stk.pop<Pointer>();
+  const Pointer &VX = S.Stk.pop<Pointer>();
+  const Pointer &Dst = S.Stk.peek<Pointer>();
+  for (unsigned I = 0; I != NumElems; ++I) {
+    using T = PrimConv<PT_Float>::T;
+    APFloat X = VX.elem<T>(I).getAPFloat();
+    APFloat Y = VY.elem<T>(I).getAPFloat();
+    APFloat F = Fn(X, Y, RM);
+    Dst.elem<Floating>(I) = Floating(F);
+  }
+  Dst.initializeAllElements();
+  return true;
+}
+
 static bool interp__builtin_elementwise_triop_fp(
     InterpState &S, CodePtr OpPC, const CallExpr *Call,
     llvm::function_ref<APFloat(const APFloat &, const APFloat &,
@@ -3499,6 +3536,22 @@ bool InterpretBuiltin(InterpState &S, CodePtr OpPC, const CallExpr *Call,
         S, OpPC, Call, [](const APSInt &LHS, const APSInt &RHS) {
           return LHS.isSigned() ? LHS.ssub_sat(RHS) : LHS.usub_sat(RHS);
         });
+
+  case clang::X86::BI__builtin_ia32_addsubpd:
+  case clang::X86::BI__builtin_ia32_addsubpd256:
+    return interp__builtin_ia32_addsub_fp(S, OpPC, Call, [](const APFloat &X, const APFloat &Y, llvm::RoundingMode RM) {
+      APFloat F = X;
+      /* F... */
+      return F;
+    });
+
+  case clang::X86::BI__builtin_ia32_addsubps:
+  case clang::X86::BI__builtin_ia32_addsubps256:
+    return interp__builtin_ia32_addsub_fp(S, OpPC, Call, [](const APFloat &X, const APFloat &Y, llvm::RoundingMode RM) {
+      APFloat F = X;
+      /* F... */
+      return F;
+    });
 
   case clang::X86::BI__builtin_ia32_pavgb128:
   case clang::X86::BI__builtin_ia32_pavgw128:
